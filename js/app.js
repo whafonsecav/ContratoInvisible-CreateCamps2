@@ -19,26 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof CONFIG_VIDEOS !== 'undefined') {
         const v1_iframe = document.getElementById('iframe-video-1');
+        const v1_link = document.getElementById('link-video-1');
         const v1_titulo = document.getElementById('titulo-video-1');
         if (v1_iframe && (CONFIG_VIDEOS.video1.url || CONFIG_VIDEOS.video1.youtube_id)) {
             const source = CONFIG_VIDEOS.video1.url || CONFIG_VIDEOS.video1.youtube_id;
             v1_iframe.src = getYoutubeEmbed(source);
+            if (v1_link) v1_link.href = source.includes('http') ? source : `https://www.youtube.com/watch?v=${source}`;
         }
         if (v1_titulo && CONFIG_VIDEOS.video1.titulo) v1_titulo.textContent = CONFIG_VIDEOS.video1.titulo;
 
         const v2_iframe = document.getElementById('iframe-video-2');
+        const v2_link = document.getElementById('link-video-2');
         const v2_titulo = document.getElementById('titulo-video-2');
         if (v2_iframe && (CONFIG_VIDEOS.video2.url || CONFIG_VIDEOS.video2.youtube_id)) {
             const source = CONFIG_VIDEOS.video2.url || CONFIG_VIDEOS.video2.youtube_id;
             v2_iframe.src = getYoutubeEmbed(source);
+            if (v2_link) v2_link.href = source.includes('http') ? source : `https://www.youtube.com/watch?v=${source}`;
         }
         if (v2_titulo && CONFIG_VIDEOS.video2.titulo) v2_titulo.textContent = CONFIG_VIDEOS.video2.titulo;
 
         const v3_iframe = document.getElementById('iframe-video-3');
+        const v3_link = document.getElementById('link-video-3');
         const v3_titulo = document.getElementById('titulo-video-3');
         if (v3_iframe && (CONFIG_VIDEOS.video3.url || CONFIG_VIDEOS.video3.youtube_id)) {
             const source = CONFIG_VIDEOS.video3.url || CONFIG_VIDEOS.video3.youtube_id;
             v3_iframe.src = getYoutubeEmbed(source);
+            if (v3_link) v3_link.href = source.includes('http') ? source : `https://www.youtube.com/watch?v=${source}`;
         }
         if (v3_titulo && CONFIG_VIDEOS.video3.titulo) v3_titulo.textContent = CONFIG_VIDEOS.video3.titulo;
     }
