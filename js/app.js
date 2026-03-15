@@ -137,6 +137,44 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentAlfStep = 0;
     const totalAlfSteps = 8;
 
+    // LISTAS DE PASOS PARA LAMINA DIAGNÓSTICO (Slide 4)
+    const diagnosticoVisualSteps = [
+        document.getElementById('d-step-0'),
+        document.getElementById('d-step-1'),
+        document.getElementById('d-step-2'),
+        document.getElementById('d-step-3'),
+        document.getElementById('d-step-4')
+    ];
+
+    const diagnosticoTextSteps = [
+        document.getElementById('dt-step-0'),
+        document.getElementById('dt-step-1'),
+        document.getElementById('dt-step-2'),
+        document.getElementById('dt-step-3'),
+        document.getElementById('dt-step-4')
+    ];
+
+    let currentDiagStep = 0;
+    const totalDiagSteps = 5;
+    let diagTimerInterval = null;
+
+    // LISTAS DE PASOS PARA LAMINA CIERRE (Slide 5)
+    const cierreVisualSteps = [
+        document.getElementById('cv-step-0'),
+        document.getElementById('cv-step-1'),
+        document.getElementById('cv-step-2'),
+        document.getElementById('cv-step-3')
+    ];
+
+    const cierreTextSteps = [
+        document.getElementById('ct-step-0'),
+        document.getElementById('ct-step-1'),
+        document.getElementById('ct-step-2'),
+        document.getElementById('ct-step-3')
+    ];
+
+    let currentCierreStep = 0;
+    const totalCierreSteps = 4;
 
     // INDICADORES (DOTS)
     slides.forEach((_, index) => {
@@ -174,6 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentSlide === 3) {
             updateAlfabetismoSteps();
             if (currentAlfStep > 0) dots[3].classList.add('substep-active');
+        } else if (currentSlide === 4) {
+            updateDiagnosticoSteps();
+            if (currentDiagStep > 0) dots[4].classList.add('substep-active');
+        } else if (currentSlide === 5) {
+            updateCierreSteps();
         } else {
             document.getElementById('slide-0').classList.remove('is-ironic');
         }
@@ -212,6 +255,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentAlfStep > 0) dots[3].classList.add('substep-active');
         else dots[3].classList.remove('substep-active');
+    }
+
+    function updateDiagnosticoSteps() {
+        // Reset Texts y Visuals globales para Diag
+        diagnosticoTextSteps.forEach(ts => ts && ts.classList.remove('active'));
+        diagnosticoVisualSteps.forEach(vs => vs && vs.classList.remove('active'));
+
+        // Reactivar actual texto y visual
+        if (diagnosticoTextSteps[currentDiagStep]) diagnosticoTextSteps[currentDiagStep].classList.add('active');
+        if (diagnosticoVisualSteps[currentDiagStep]) diagnosticoVisualSteps[currentDiagStep].classList.add('active');
+
+        // Logic para el Reloj 10 Minutos Automático
+        const clockEl = document.getElementById('diag-clock');
+        if (currentDiagStep === 1 && currentSlide === 4) {
+            clearInterval(diagTimerInterval);
+            clockEl.textContent = "00:00";
+            let seconds = 0;
+            const targetSeconds = 600; // 10 minutes
+
+            // Hacker-style decrypt effect
+            const tickRate = 50; // ms per frame
+            const duration = 5000; // 5 seconds duration
+            let elapsed = 0;
+
+            setTimeout(() => {
+                diagTimerInterval = setInterval(() => {
+                    elapsed += tickRate;
+                    
+                    if (elapsed >= duration) {
+                        clockEl.textContent = "10:00";
+                        clearInterval(diagTimerInterval);
+                    } else {
+                        // Random time like 08:43, 02:99, etc.
+                        const rm = Math.floor(Math.random() * 99).toString().padStart(2, '0');
+                        const rs = Math.floor(Math.random() * 99).toString().padStart(2, '0');
+                        clockEl.textContent = `${rm}:${rs}`;
+                    }
+                }, tickRate);
+            }, 800); // Wait for the number to finish sliding up
+        } else {
+            clearInterval(diagTimerInterval);
+            if (clockEl) clockEl.textContent = "00:00";
+        }
+
+        if (currentDiagStep > 0) dots[4].classList.add('substep-active');
+        else dots[4].classList.remove('substep-active');
+    }
+
+    function updateCierreSteps() {
+        cierreTextSteps.forEach(ts => ts && ts.classList.remove('active'));
+        cierreVisualSteps.forEach(vs => vs && vs.classList.remove('active'));
+
+        if (cierreTextSteps[currentCierreStep]) cierreTextSteps[currentCierreStep].classList.add('active');
+        if (cierreVisualSteps[currentCierreStep]) cierreVisualSteps[currentCierreStep].classList.add('active');
     }
 
     function updateMechanicsSteps() {
@@ -310,6 +407,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateNav();
                 }
             }
+        } else if (currentSlide === 4) {
+            if (currentDiagStep < totalDiagSteps - 1) {
+                currentDiagStep++;
+                updateDiagnosticoSteps();
+            } else {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateNav();
+                }
+            }
+        } else if (currentSlide === 5) {
+            if (currentCierreStep < totalCierreSteps - 1) {
+                currentCierreStep++;
+                updateCierreSteps();
+            } else {
+                // Already on last step of last slide
+            }
         } else if (currentSlide !== 2 && currentSlide < slides.length - 1) {
             currentSlide++;
             updateNav();
@@ -329,6 +443,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentAlfStep > 0) {
                 currentAlfStep--;
                 updateAlfabetismoSteps();
+            } else {
+                currentSlide--;
+                updateNav();
+            }
+        } else if (currentSlide === 4) {
+            if (currentDiagStep > 0) {
+                currentDiagStep--;
+                updateDiagnosticoSteps();
+            } else {
+                currentSlide--;
+                updateNav();
+            }
+        } else if (currentSlide === 5) {
+            if (currentCierreStep > 0) {
+                currentCierreStep--;
+                updateCierreSteps();
             } else {
                 currentSlide--;
                 updateNav();

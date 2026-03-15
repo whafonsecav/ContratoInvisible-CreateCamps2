@@ -159,6 +159,16 @@ body {
 
 
 /* ==================================================
+   LA SUBASTA (SLIDE 2)
+   ================================================== */
+.auction-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 2cqw;
+    position: relative;
+    z-index: 50; /* Fixed LT01 overlap bug */
+}
+
+/* ==================================================
    CONTROLES PERIFÉRICOS
    ================================================== */
 .main-header {
@@ -657,6 +667,8 @@ body {
     display: flex;
     flex-direction: column;
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-out-expo);
 }
 
 .text-step .step-num {
@@ -726,6 +738,7 @@ body {
 .text-step.active {
     z-index: 10;
     pointer-events: auto;
+    opacity: 1;
 }
 
 .text-step.active .step-num,
@@ -939,6 +952,143 @@ body {
         border-color: rgba(0, 238, 255, 0.3);
     }
 }
+
+/* ==================================================
+   DIAGNÓSTICO (SLIDE 4) - POLISHED MOTION
+   ================================================== */
+
+.diag-split-scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4cqw;
+    width: 100%;
+    height: 100%;
+}
+
+.diag-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+}
+
+.diag-huge-icon {
+    width: 15cqw;
+    height: 15cqw;
+    margin-bottom: 2cqw;
+}
+
+.diag-big-text {
+    font-family: var(--font-heading);
+    font-size: 8cqw;
+    font-weight: 900;
+    line-height: 1;
+    margin: 0;
+}
+
+.diag-med-text {
+    font-family: var(--font-heading);
+    font-size: 4cqw;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0;
+}
+
+/* Animations */
+.pop-in {
+    transform: scale(0.5);
+}
+
+.visual-step.active .pop-in {
+    animation: diagPopIn 0.8s var(--ease-spring) forwards;
+}
+
+@keyframes diagPopIn {
+    to { opacity: 1; transform: scale(1); }
+}
+
+.slide-up-fade {
+    transform: translateY(3cqw);
+}
+
+.visual-step.active .slide-up-fade {
+    animation: diagSlideUp 0.8s var(--ease-out-expo) forwards;
+}
+
+@keyframes diagSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pulse-glow {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: drop-shadow(0 0 0 transparent);
+}
+
+.visual-step.active .pulse-glow {
+    animation: diagPulseGlow 2s infinite alternate ease-in-out, diagPopIn 0.8s var(--ease-spring) forwards;
+}
+
+@keyframes diagPulseGlow {
+    100% { filter: drop-shadow(0 0 30px var(--accent-cyan)); transform: scale(1.05); }
+}
+
+.bounce-in {
+    opacity: 0;
+    transform: translateY(-5cqw);
+}
+
+.visual-step.active .bounce-in {
+    animation: diagBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes diagBounceIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.visual-step.active .delay-1 { animation-delay: 0.3s; }
+.visual-step.active .delay-2 { animation-delay: 0.6s; }
+
+/* Right Pane List Styles */
+.diag-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5cqw;
+}
+
+.diag-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1cqw;
+}
+
+.diag-list-item p {
+    font-family: var(--font-body);
+    font-size: 1.5cqw;
+    line-height: 1.4;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.diag-list-item strong {
+    color: #fff;
+}
+
+.bullet {
+    width: 0.8cqw;
+    height: 0.8cqw;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.5cqw;
+}
+
+.success-bg { background-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
+.gold-bg { background-color: var(--accent-yellow); box-shadow: 0 0 10px var(--accent-yellow); }
+.alert-bg { background-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
+.cyan-bg { background-color: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
 
 /* STEP 3: INCREMENTS CONTADOR */
 .counter-scene {
@@ -1372,8 +1522,178 @@ body {
 }
 
 /* ==========================================================
-   ====== SLIDE 2: INICIAR SUBASTA (10 LOTES APP) =======
+   ====== ESTADISTICAS SUBASTA (REPORTE FORENSE) ==========
    ========================================================== */
+
+/* Global utility: used by JS to show/hide elements */
+.hidden {
+    display: none !important;
+}
+
+.auction-stats-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 14cqh 4cqw 2cqh;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: radial-gradient(ellipse at top, #0a0a14 0%, #050507 100%);
+}
+
+.auction-stats-container.hidden {
+    display: none;
+}
+
+.stats-main-title {
+    font-family: var(--font-heading);
+    font-size: 3cqw;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 0 40px rgba(0, 238, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5cqh;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.soma-stats-table-wrapper {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.soma-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: var(--font-body);
+}
+
+.soma-stats-table thead tr {
+    border-bottom: 0.3cqw solid var(--accent-cyan);
+}
+
+.soma-stats-table th {
+    font-family: var(--font-heading);
+    font-size: 0.9cqw;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+    padding: 0.3cqh 1cqw;
+    text-align: left;
+}
+
+.soma-stats-table th.text-right { text-align: right; }
+.soma-stats-table th.text-center { text-align: center; }
+
+.soma-stats-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background 0.2s;
+}
+
+.soma-stats-table tbody tr:first-child {
+    background: rgba(0, 238, 255, 0.05);
+    border-left: 0.3cqw solid var(--accent-cyan);
+}
+
+.soma-stats-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.soma-stats-table tbody tr.unsold-row {
+    opacity: 0.4;
+}
+
+.soma-stats-table td {
+    padding: 0.2cqh 1cqw;
+    vertical-align: middle;
+    font-size: 1.1cqw;
+    line-height: 1.2;
+    color: #ccc;
+}
+
+.soma-stats-table td.text-right { text-align: right; }
+.soma-stats-table td.text-center { text-align: center; }
+
+.table-badge {
+    display: inline-block;
+    background: var(--accent-cyan);
+    color: #000;
+    font-family: var(--font-heading);
+    font-size: 0.9cqw;
+    font-weight: 900;
+    padding: 0.2cqh 0.6cqw;
+    border-radius: 0.2cqw;
+}
+
+.table-title {
+    font-size: 1.2cqw;
+    color: #fff;
+    font-weight: 600;
+}
+
+.text-lg {
+    font-size: 1.6cqw !important;
+    font-family: var(--font-heading);
+}
+
+.table-count {
+    font-family: var(--font-heading);
+    font-size: 1.4cqw;
+    color: var(--accent-yellow);
+}
+
+/* Small IR audio button group inside table */
+.sm-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3cqw;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.4cqw;
+    padding: 0.2cqh 0.4cqw;
+}
+
+.sm-group.active-group {
+    border-color: var(--accent-green);
+    background: rgba(0, 255, 127, 0.1);
+    box-shadow: 0 0 10px rgba(0, 255, 127, 0.2);
+}
+
+.ir-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 0.2cqh 0.4cqw;
+    border-radius: 0.2cqw;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s, background 0.2s;
+}
+.ir-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.ir-btn.active { color: var(--accent-green); }
+.ir-btn i { width: 1.2cqw; height: 1.2cqw; }
+
+/* ===========================================================
+   ====== SLIDE 2: INICIAR SUBASTA (10 LOTES APP) =======
+   =========================================================== */
 
 .auction-app-container {
     display: flex;
@@ -1640,7 +1960,9 @@ body {
 .lot-navigation {
     margin-top: 1cqw;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1cqw;
 }
 
 .btn-next-lot {
@@ -1656,7 +1978,7 @@ body {
     align-items: center;
     gap: 0.5cqw;
     text-transform: uppercase;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .btn-next-lot:hover {
@@ -1669,105 +1991,34 @@ body {
     height: 1.2cqw;
 }
 
-/* STATS SCREEN */
-.auction-stats-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4cqw;
-    background: radial-gradient(circle at center, rgba(0, 238, 255, 0.05) 0%, transparent 70%);
-}
-
-.stats-main-title {
-    font-size: 4cqw;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.stats-cards {
-    display: flex;
-    gap: 3cqw;
-    width: 90%;
-}
-
-.stat-card {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 3cqw;
-    border-radius: 1cqw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 1cqw;
-}
-
-.stat-card i {
-    width: 4cqw;
-    height: 4cqw;
-    margin-bottom: 1cqw;
-}
-
-.stat-label {
-    font-family: var(--font-body);
+.btn-prev-lot {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.6);
+    padding: 0.8cqw 1.5cqw;
+    font-family: var(--font-heading);
     font-size: 1cqw;
-    color: #888;
-    letter-spacing: 2px;
-}
-
-.stat-value {
-    font-family: var(--font-heading);
-    font-size: 4cqw;
-    line-height: 1;
-}
-
-.stat-desc {
-    font-family: var(--font-body);
-    font-size: 1.2cqw;
-    color: #ccc;
-    font-style: italic;
-}
-
-/* IR Audios on Stats Screen */
-.stats-ir-audios {
-    width: 90%;
-    margin-top: 2cqw;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1cqw;
-    padding: 2cqw;
-}
-
-.ir-title {
-    font-family: var(--font-heading);
-    color: var(--accent-magenta);
-    font-size: 1.5cqw;
-    margin-bottom: 1.5cqw;
-    text-align: center;
-    letter-spacing: 2px;
-}
-
-.ir-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1cqw;
-}
-
-.ir-audio-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 0.5cqw;
-    padding: 1cqw;
+    cursor: pointer;
+    border-radius: 0.4cqw;
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 0.5cqw;
-    text-align: center;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease;
 }
+
+.btn-prev-lot:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-prev-lot i {
+    width: 1.2cqw;
+    height: 1.2cqw;
+}
+
+/* (old stats-cards/ir-grid CSS removed — now using soma-stats-table in new .auction-stats-container above) */
 
 .ir-badge {
     background: #222;
@@ -1843,6 +2094,7 @@ body {
     box-shadow: 0 0 30px rgba(0,0,0,0.8);
     position: relative;
     border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 4cqw;
 }
 
 .video-container iframe {
@@ -1856,7 +2108,7 @@ body {
 
 .youtube-direct-link {
     position: absolute;
-    bottom: -3cqw;
+    bottom: -4.5cqw;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1895,3 +2147,203 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ==================================================
+   CIERRE (SLIDE 5) - MOTION GRAPHICS
+   ================================================== */
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- CONTRACT DOCUMENT ---------- */
+.cierre-doc-scene {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contract-doc {
+    width: 28cqw;
+    background: #f5f2eb;
+    border-radius: 0.5cqw;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 0.3cqw rgba(0, 238, 255, 0.4),
+        0 10px 40px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.visual-step.active .contract-doc {
+    animation: diagPopIn 0.8s var(--ease-spring) forwards;
+}
+
+.doc-header {
+    background: #111;
+    color: var(--accent-cyan);
+    font-family: var(--font-heading);
+    font-size: 0.9cqw;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 1cqw;
+    text-transform: uppercase;
+    border-bottom: 0.2cqw solid var(--accent-cyan);
+}
+
+.doc-body {
+    padding: 2cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8cqw;
+    position: relative;
+}
+
+.doc-line {
+    height: 0.3cqw;
+    background: rgba(0,0,0,0.15);
+    border-radius: 1px;
+    width: 100%;
+}
+
+.doc-line.short { width: 55%; }
+.doc-line.medium { width: 75%; }
+
+.doc-seal {
+    position: absolute;
+    top: 1.5cqw;
+    right: 1.5cqw;
+    width: 7cqw;
+    height: 7cqw;
+    border-radius: 50%;
+    border: 0.3cqw solid var(--accent-cyan);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 238, 255, 0.08);
+    color: var(--accent-cyan);
+    font-family: var(--font-heading);
+    font-size: 0.65cqw;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.doc-seal i { width: 2cqw; height: 2cqw; margin-bottom: 0.2cqw; }
+
+.visual-step.active .doc-seal {
+    animation: diagSlideUp 0.8s var(--ease-out-expo) forwards;
+}
+
+.doc-signature-line {
+    margin-top: 2cqw;
+    display: flex;
+    align-items: flex-end;
+    gap: 1cqw;
+    opacity: 0;
+    transform: translateY(-1.5cqw);
+}
+
+.visual-step.active .doc-signature-line {
+    animation: diagBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.sig-label {
+    font-family: var(--font-heading);
+    font-size: 0.7cqw;
+    color: rgba(0,0,0,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+}
+
+.sig-underline {
+    flex: 1;
+    height: 0.15cqw;
+    background: rgba(0,0,0,0.3);
+}
+
+/* ---------- X → ✔ TRANSFORM ---------- */
+.x-transform-scene {
+    display: flex;
+    align-items: center;
+    gap: 3cqw;
+}
+
+.old-x {
+    font-family: var(--font-heading);
+    font-size: 10cqw;
+    font-weight: 900;
+    color: var(--accent-red);
+    opacity: 0;
+    transform: scale(0.5);
+    text-shadow: 0 0 30px rgba(255, 42, 42, 0.5);
+}
+
+.visual-step.active .old-x {
+    animation: diagPopIn 0.8s var(--ease-spring) forwards;
+}
+
+.new-x {
+    font-family: var(--font-heading);
+    font-size: 10cqw;
+    font-weight: 900;
+    opacity: 0;
+    transform: translateY(3cqw);
+    text-shadow: 0 0 30px rgba(0, 255, 127, 0.5);
+}
+
+.visual-step.active .new-x {
+    animation: diagSlideUp 0.8s var(--ease-out-expo) forwards;
+}
+
+/* ---------- DECLARATION TEXT ---------- */
+.declaration-text {
+    text-align: center;
+    margin-top: 2cqw;
+    opacity: 0;
+    transform: translateY(3cqw);
+}
+
+.visual-step.active .declaration-text {
+    animation: diagSlideUp 1s var(--ease-out-expo) forwards;
+}
+
+.decl-line {
+    font-family: var(--font-heading);
+    font-size: 2.5cqw;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.decl-big {
+    font-family: var(--font-heading);
+    font-size: 6cqw;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0.3cqw 0;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(255, 42, 42, 0.5);
+}
+
+/* Magenta accent for cierre */
+.accent-magenta { color: var(--accent-magenta); }
+
+@keyframes spinSlow {
+    to { transform: rotate(360deg); }
+}
+
+.spin-slow { animation: spinSlow 6s linear infinite; }

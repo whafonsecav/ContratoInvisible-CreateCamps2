@@ -278,7 +278,7 @@
 
             <!-- ====== SLIDE 2: INICIAR SUBASTA (Lotes 1-10) ====== -->
             <section class="slide infographic-slide" id="slide-2">
-                <div class="auction-app-container">
+                <div class="auction-app-container" style="padding-top: 10cqh;">
 
                     <!-- LADO IZQUIERDO: Imagen y Controles Audio -->
                     <div class="auction-left-pane">
@@ -338,6 +338,9 @@
                         </div>
 
                         <div class="lot-navigation">
+                            <button class="btn-prev-lot" onclick="prevLot()">
+                                <i data-lucide="arrow-left"></i> LOTE ANTERIOR
+                            </button>
                             <button class="btn-next-lot" onclick="nextLot()">
                                 SIGUIENTE LOTE <i data-lucide="arrow-right"></i>
                             </button>
@@ -348,37 +351,28 @@
 
                 <!-- PANTALLA ESTADISTICAS LOTE 11 (Oculta por defecto) -->
                 <div class="auction-stats-container hidden" id="auction-stats">
-                    <h1 class="stats-main-title glitch" data-text="REPORTE FORENSE DE LA SALA">REPORTE FORENSE DE LA
-                        SALA</h1>
-
-                    <div class="stats-cards">
-                        <div class="stat-card">
-                            <i data-lucide="trending-up" class="success-text"></i>
-                            <h4 class="stat-label">PUJA RÁCORD ABSOLUTA</h4>
-                            <h2 class="stat-value highlight-cyan" id="stat-max-bid">$0</h2>
-                            <p class="stat-desc" id="stat-max-product">--</p>
-                        </div>
-
-                        <div class="stat-card">
-                            <i data-lucide="swords" class="alert-text"></i>
-                            <h4 class="stat-label">PRODUCTO MÁS PELEADO</h4>
-                            <h2 class="stat-value alert-text" id="stat-most-fought">--</h2>
-                            <p class="stat-desc" id="stat-fought-count">0 Intenciones de puja</p>
-                        </div>
-
-                        <div class="stat-card">
-                            <i data-lucide="coins" class="text-gold"></i>
-                            <h4 class="stat-label">CAPITAL TEÓRICO MOVILIZADO</h4>
-                            <h2 class="stat-value text-gold" id="stat-total-money">$0</h2>
-                            <p class="stat-desc">Dólares virtuales quemados</p>
-                        </div>
+                    <div class="stats-header">
+                        <h1 class="stats-main-title">RESUMEN DE LA SUBASTA</h1>
+                        <button class="btn-prev-lot" onclick="goBackToLot()" style="margin-left:2cqw;">
+                            <i data-lucide="arrow-left"></i> VOLVER AL LOTE 10
+                        </button>
                     </div>
 
-                    <div class="stats-ir-audios" id="stats-ir-audios">
-                        <h3 class="ir-title">DESCARGOS DE RESPONSABILIDAD (AUDIOS IRÓNICOS)</h3>
-                        <div class="ir-grid" id="ir-grid">
-                            <!-- Botones generados por JS -->
-                        </div>
+                    <div class="soma-stats-table-wrapper">
+                        <table class="soma-stats-table" id="stats-table">
+                            <thead>
+                                <tr>
+                                    <th>LOTE</th>
+                                    <th>PRODUCTO</th>
+                                    <th class="text-right">VALOR FINAL</th>
+                                    <th class="text-center">PUJAS</th>
+                                    <th class="text-center">AUDIO FORENSE (IR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stats-table-body">
+                                <!-- Inyectado por JS -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -537,8 +531,304 @@
                     </div>
                 </div>
             </section>
+
+            <!-- ====== SLIDE 4: DIAGNÓSTICO ====== -->
+            <section class="slide infographic-slide" id="slide-4">
+                <div class="split-layout">
+                    <!-- PANEL VISUAL -->
+                    <div class="visual-pane" id="diagnostico-visuals" style="background: var(--bg-dark);">
+                        
+                        <!-- Step 0: Intro Diag -->
+                        <div class="visual-step" id="d-step-0">
+                            <div class="alfabetismo-scene flex-center" style="height: 100%;">
+                                <div class="glitch-wrapper mb-lg">
+                                    <h1 class="massive-call text-scanline m-call-1 brutal-huge-text" data-text="DIAGNÓSTICO">DIAGNÓSTICO</h1>
+                                </div>
+                                <div class="diag-hero-icon pulse-glow">
+                                    <i data-lucide="microscope" class="highlight-cyan" style="width: 15cqw; height: 15cqw;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Instrucciones -->
+                        <div class="visual-step" id="d-step-1">
+                            <div class="diag-split-scene">
+                                <div class="diag-item pop-in">
+                                    <i data-lucide="users" class="text-gold mb-sm" style="width: 8cqw; height: 8cqw;"></i>
+                                    <h1 class="diag-big-text text-gold">2 <span style="font-size: 0.4em;">PERSONAS</span></h1>
+                                </div>
+                                
+                                <div class="diag-item pop-in delay-2">
+                                    <i data-lucide="timer" class="highlight-cyan mb-sm" style="width: 8cqw; height: 8cqw;"></i>
+                                    <h1 class="diag-big-text highlight-cyan" id="diag-clock" style="font-variant-numeric: tabular-nums;">00:00</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Preguntas 1 y 2 -->
+                        <div class="visual-step" id="d-step-2">
+                            <div class="diag-split-scene">
+                                <div class="diag-item slide-up-fade">
+                                    <i data-lucide="shopping-bag" class="success-text mb-sm" style="width: 6cqw; height: 6cqw;"></i>
+                                    <h2 class="diag-med-text success-text">¿QUÉ<br>COMPRASTE?</h2>
+                                </div>
+                                <div class="diag-item slide-up-fade delay-1">
+                                    <i data-lucide="map-pin" class="text-gold mb-sm" style="width: 6cqw; height: 6cqw;"></i>
+                                    <h2 class="diag-med-text text-gold">¿DÓNDE LO<br>COMPRASTE?</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Preguntas 3 y 4 -->
+                        <div class="visual-step" id="d-step-3">
+                             <div class="diag-split-scene">
+                                <div class="diag-item slide-up-fade">
+                                    <i data-lucide="leaf" class="success-text mb-sm" style="width: 6cqw; height: 6cqw;"></i>
+                                    <h2 class="diag-med-text success-text">¿MATERIAL<br>SOSTENIBLE?</h2>
+                                </div>
+                                <div class="diag-item slide-up-fade delay-1">
+                                    <i data-lucide="factory" class="alert-text mb-sm" style="width: 6cqw; height: 6cqw;"></i>
+                                    <h2 class="diag-med-text alert-text">¿FAST<br>FASHION?</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Pregunta 5 (Centro) -->
+                        <div class="visual-step" id="d-step-4">
+                            <div class="alfabetismo-scene flex-center" style="height: 100%;">
+                                <div class="diag-final-card bounce-in">
+                                    <i data-lucide="recycle" class="highlight-cyan spin-slow mb-md" style="width: 12cqw; height: 12cqw;"></i>
+                                    <h2 class="diag-big-text highlight-cyan m-call-1" style="font-size: 5cqw;">¿SEGUNDA MANO?</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL DE TEXTO -->
+                    <div class="text-pane" id="diagnostico-texts">
+                        <!-- Step 0 -->
+                        <div class="text-step" id="dt-step-0">
+                            <div class="step-line" style="background-color: var(--neo-cyan);"></div>
+                            <div class="text-mask"><h3 class="step-num highlight-cyan">01</h3></div>
+                            <div class="text-mask"><h4 class="step-title highlight-cyan">ACTIVIDAD DE DIAGNÓSTICO</h4></div>
+                            <div class="text-mask delay-1"><p class="step-desc" style="font-size: 1.5cqw;">Ha llegado el momento de mirar hacia adentro y analizar nuestros propios hábitos de consumo. La teoría no sirve de nada si no la aplicamos a la vida real.</p></div>
+                        </div>
+
+                        <!-- Step 1 -->
+                        <div class="text-step" id="dt-step-1">
+                            <div class="step-line" style="background-color: var(--neo-gold);"></div>
+                            <div class="text-mask"><h3 class="step-num text-gold">02</h3></div>
+                            <div class="text-mask"><h4 class="step-title text-gold">INSTRUCCIONES</h4></div>
+                            <div class="text-mask delay-1"><p class="step-desc" style="font-size: 1.5cqw;">Divídanse en <strong>grupos de 2 personas</strong>.</p></div>
+                            <div class="text-mask delay-2"><p class="step-desc mt-sm" style="font-size: 1.5cqw;">Tendrán exactamente <strong>10 minutos</strong> para discutir las siguientes preguntas.</p></div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="text-step" id="dt-step-2">
+                            <div class="step-line success-line"></div>
+                            <div class="text-mask"><h3 class="step-num success-text">03</h3></div>
+                            <div class="text-mask"><h4 class="step-title success-text">INVENTARIO RECIENTE</h4></div>
+                            <div class="diag-list mt-md">
+                                <div class="text-mask delay-1">
+                                    <div class="diag-list-item">
+                                        <span class="bullet success-bg"></span>
+                                        <p>¿Qué prendas compraste en los últimos 6 meses?</p>
+                                    </div>
+                                </div>
+                                <div class="text-mask delay-2">
+                                    <div class="diag-list-item">
+                                        <span class="bullet gold-bg"></span>
+                                        <p>¿Dónde las compraste? (Marcas, boutiques, tiendas online).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="text-step" id="dt-step-3">
+                            <div class="step-line warning-line"></div>
+                            <div class="text-mask"><h3 class="step-num alert-text">04</h3></div>
+                            <div class="text-mask"><h4 class="step-title alert-text">LA HUELLA TEXTIL</h4></div>
+                            <div class="diag-list mt-md">
+                                <div class="text-mask delay-1">
+                                    <div class="diag-list-item">
+                                        <span class="bullet success-bg"></span>
+                                        <p>¿Sus materiales son realmente sostenibles o amigables?</p>
+                                    </div>
+                                </div>
+                                <div class="text-mask delay-2">
+                                    <div class="diag-list-item">
+                                        <span class="bullet alert-bg"></span>
+                                        <p>¿Crees que estas compras se ven involucradas en el <strong>Fast Fashion</strong>?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="text-step" id="dt-step-4">
+                            <div class="step-line" style="background-color: var(--neo-cyan);"></div>
+                            <div class="text-mask"><h3 class="step-num highlight-cyan">05</h3></div>
+                            <div class="text-mask"><h4 class="step-title highlight-cyan">ALTERNATIVAS CONSCIENTES</h4></div>
+                            <div class="text-mask delay-1">
+                                <div class="diag-list-item mt-md">
+                                    <span class="bullet cyan-bg"></span>
+                                    <p>¿En alguna ocasión has consumido ropa de algún lugar que apoye el uso de prendas de <strong>segunda mano</strong>?</p>
+                                </div>
+                            </div>
+                            <div class="text-mask delay-2"><p class="step-desc highlight-cyan mt-md" style="font-weight: 700;">Prepárense para compartir sus hallazgos.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== SLIDE 5: CIERRE ====== -->
+            <section class="slide infographic-slide" id="slide-5">
+                <div class="split-layout">
+
+                    <!-- PANEL VISUAL IZQUIERDO -->
+                    <div class="visual-pane" id="cierre-visuals">
+
+                        <!-- Step 0: Intro / La firma -->
+                        <div class="visual-step" id="cv-step-0">
+                            <div class="alfabetismo-scene flex-center" style="height:100%; flex-direction:column;">
+                                <i data-lucide="file-signature" class="pop-in pulse-glow highlight-cyan" style="width:14cqw;height:14cqw;"></i>
+                                <h2 class="slide-up-fade diag-med-text highlight-cyan mt-md delay-1" style="font-size:5cqw;letter-spacing:-0.02em;">LA FIRMA</h2>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: El documento -->
+                        <div class="visual-step" id="cv-step-1">
+                            <div class="cierre-doc-scene">
+                                <div class="contract-doc pop-in">
+                                    <div class="doc-header">CONTRATO DE AUTONOMÍA DE CONSUMO</div>
+                                    <div class="doc-body">
+                                        <div class="doc-line"></div>
+                                        <div class="doc-line short"></div>
+                                        <div class="doc-line"></div>
+                                        <div class="doc-line medium"></div>
+                                        <div class="doc-line"></div>
+                                        <div class="doc-seal slide-up-fade delay-1">
+                                            <i data-lucide="shield-check"></i>
+                                            <span>PACTO<br>ÉTICO</span>
+                                        </div>
+                                        <div class="doc-signature-line bounce-in delay-2">
+                                            <span class="sig-label">FIRMA</span>
+                                            <div class="sig-underline"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: El Compromiso (X tachada → acción concreta) -->
+                        <div class="visual-step" id="cv-step-2">
+                            <div class="alfabetismo-scene flex-center" style="height:100%;flex-direction:column;gap:2cqw;">
+                                <div class="x-transform-scene">
+                                    <span class="old-x pop-in">✕</span>
+                                    <i data-lucide="arrow-right" class="bounce-in delay-1 highlight-cyan" style="width:5cqw;height:5cqw;"></i>
+                                    <span class="new-x slide-up-fade delay-2 success-text">✔</span>
+                                </div>
+                                <h2 class="diag-med-text slide-up-fade delay-1 text-center" style="font-size:3.5cqw;">19<br><span class="success-text" style="font-size:2cqw;">COMPROMISOS</span></h2>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: La Declaración -->
+                        <div class="visual-step" id="cv-step-3">
+                            <div class="alfabetismo-scene flex-center" style="height:100%;flex-direction:column;">
+                                <i data-lucide="award" class="bounce-in text-gold" style="width:13cqw;height:13cqw;filter:drop-shadow(0 0 30px rgba(255,204,0,0.6));"></i>
+                                <div class="declaration-text slide-up-fade delay-1">
+                                    <p class="decl-line">YA NO SOMOS</p>
+                                    <p class="decl-big alert-text">ANALFABETAS</p>
+                                    <p class="decl-line highlight-cyan">DEL CONSUMO</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL TEXTO DERECHO -->
+                    <div class="text-pane" id="cierre-texts">
+
+                        <!-- CT Step 0 -->
+                        <div class="text-step" id="ct-step-0">
+                            <div class="step-line" style="background-color:var(--accent-magenta);"></div>
+                            <div class="text-mask"><h3 class="step-num" style="color:var(--accent-magenta);">01</h3></div>
+                            <div class="text-mask"><h4 class="step-title" style="color:var(--accent-magenta);">CIERRE: LA FIRMA</h4></div>
+                            <div class="text-mask delay-1">
+                                <p class="step-desc mt-sm">Duración: <strong>10 minutos</strong>. Pasamos del espectador al <strong>actor consciente</strong>.</p>
+                            </div>
+                            <div class="text-mask delay-2">
+                                <p class="step-desc mt-sm">Ya no basta con entender cómo el mercado nos manipula — ahora decidimos qué hacer con ese conocimiento.</p>
+                            </div>
+                        </div>
+
+                        <!-- CT Step 1 -->
+                        <div class="text-step" id="ct-step-1">
+                            <div class="step-line" style="background-color:var(--accent-cyan);"></div>
+                            <div class="text-mask"><h3 class="step-num highlight-cyan">02</h3></div>
+                            <div class="text-mask"><h4 class="step-title highlight-cyan">EL DOCUMENTO</h4></div>
+                            <div class="diag-list mt-md">
+                                <div class="text-mask delay-1">
+                                    <div class="diag-list-item">
+                                        <span class="bullet cyan-bg"></span>
+                                        <p>Cada uno de los <strong>19 asistentes</strong> recibe un documento impreso con <strong>estética legal</strong>.</p>
+                                    </div>
+                                </div>
+                                <div class="text-mask delay-2">
+                                    <div class="diag-list-item">
+                                        <span class="bullet gold-bg"></span>
+                                        <p>Titulado: <strong>"Contrato de Autonomía de Consumo"</strong>.</p>
+                                    </div>
+                                </div>
+                                <div class="text-mask delay-2">
+                                    <div class="diag-list-item">
+                                        <span class="bullet success-bg"></span>
+                                        <p>Resignifica la <strong>"X"</strong>: ya no firmamos a ciegas, sino con plena claridad.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CT Step 2 -->
+                        <div class="text-step" id="ct-step-2">
+                            <div class="step-line success-line"></div>
+                            <div class="text-mask"><h3 class="step-num success-text">03</h3></div>
+                            <div class="text-mask"><h4 class="step-title success-text">EL ACTO SIMBÓLICO</h4></div>
+                            <div class="diag-list mt-md">
+                                <div class="text-mask delay-1">
+                                    <div class="diag-list-item">
+                                        <span class="bullet success-bg"></span>
+                                        <p><strong>El Compromiso:</strong> Una acción concreta, realista e inmediata en el campus que promueva el ODS 12.</p>
+                                    </div>
+                                </div>
+                                <div class="text-mask delay-2">
+                                    <div class="diag-list-item">
+                                        <span class="bullet gold-bg"></span>
+                                        <p><strong>La Validación:</strong> Firma con nombre completo y legible — un pacto ético personal.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CT Step 3 -->
+                        <div class="text-step" id="ct-step-3">
+                            <div class="step-line" style="background-color:var(--accent-yellow);"></div>
+                            <div class="text-mask"><h3 class="step-num text-gold">04</h3></div>
+                            <div class="text-mask"><h4 class="step-title text-gold">LA DECLARACIÓN</h4></div>
+                            <div class="text-mask delay-1">
+                                <p class="step-desc mt-sm">Al firmar, el grupo declara colectivamente que ha dejado de ser <strong class="alert-text">"analfabeta del consumo"</strong>.</p>
+                            </div>
+                            <div class="text-mask delay-2">
+                                <p class="step-desc mt-sm">Hemos recuperado la autonomía para decidir qué estamos <strong class="highlight-cyan">"comprando" realmente</strong> con nuestro tiempo y dinero cada vez que realizamos una transacción.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
+
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/config.js"></script>

@@ -215,7 +215,31 @@ function updateAudioUI(type, isPlaying) {
 
 // Navigation
 function nextLot() {
-    currentLotIndex++;
+    if (currentLotIndex >= auctionData.length - 1) {
+        // On last lot → go directly to stats
+        currentLotIndex = auctionData.length;
+        showStats();
+    } else {
+        currentLotIndex++;
+        renderLot(currentLotIndex);
+    }
+}
+
+function prevLot() {
+    if (currentLotIndex <= 0) return;
+    if (currentLotIndex >= auctionData.length) {
+        // Coming from stats, go to last lot
+        currentLotIndex = auctionData.length - 1;
+    } else {
+        currentLotIndex--;
+    }
+    renderLot(currentLotIndex);
+}
+
+function goBackToLot() {
+    elStatsContainer.classList.add('hidden');
+    elAppContainer.classList.remove('hidden');
+    currentLotIndex = auctionData.length - 1;
     renderLot(currentLotIndex);
 }
 
@@ -264,77 +288,65 @@ function stopStatsAudio() {
 }
 
 function updateStatsAudioUI(baseImg, isPlaying) {
-    document.querySelectorAll('.ir-btn-play').forEach(btn => {
+    // Reset all IR play buttons in the table
+    document.querySelectorAll('.ir-btn.btn-play').forEach(btn => {
         btn.classList.remove('active');
-        btn.innerHTML = `<i data-lucide="play"></i> Reproducir`;
+        btn.innerHTML = '<i data-lucide="play"></i>';
+        const group = btn.closest('div');
+        if (group) group.classList.remove('active-group');
     });
 
     if (isPlaying) {
         const activeBtn = document.getElementById(`ir-btn-${baseImg}`);
         if (activeBtn) {
             activeBtn.classList.add('active');
-            activeBtn.innerHTML = `<i data-lucide="square"></i> Detener`;
+            activeBtn.innerHTML = '<i data-lucide="pause"></i>';
+            const group = activeBtn.closest('div');
+            if (group) group.classList.add('active-group');
         }
     }
     lucide.createIcons();
 }
 
-// Show Final Statistics Screen
+// Show Final Statistics Screen (Data Table)
 function showStats() {
     stopAudio();
     elAppContainer.classList.add('hidden');
     elStatsContainer.classList.remove('hidden');
 
-    // Calculations
-    let maxBid = 0;
-    let maxBidLotName = "--";
+    // Create a copy to sort without messing up the original index if needed
+    const sortedLots = [...auctionData].sort((a, b) => b.currentBid - a.currentBid);
+    
+    const tbody = document.getElementById('stats-table-body');
+    tbody.innerHTML = '';
 
-    let maxFights = 0;
-    let mostFoughtLotName = "--";
-
-    let totalMoneyHole = 0;
-
-    auctionData.forEach(lot => {
-        // Find Highest Bid
-        if (lot.currentBid > maxBid) {
-            maxBid = lot.currentBid;
-            maxBidLotName = lot.title;
+    sortedLots.forEach((lot) => {
+        const tr = document.createElement('tr');
+        
+        // Highlight row classes based on performance
+        if (lot.currentBid === 0) {
+            tr.className = 'unsold-row';
         }
 
-        // Find Most popular
-        if (lot.bidEvents > maxFights) {
-            maxFights = lot.bidEvents;
-            mostFoughtLotName = lot.title;
-        }
-
-        // Add to total
-        totalMoneyHole += lot.currentBid;
-    });
-
-    // Write to DOM
-    document.getElementById('stat-max-bid').textContent = `$${maxBid}`;
-    document.getElementById('stat-max-product').textContent = maxBidLotName;
-
-    document.getElementById('stat-most-fought').textContent = mostFoughtLotName;
-    document.getElementById('stat-fought-count').textContent = `${maxFights} Inserciones registradas`;
-
-    document.getElementById('stat-total-money').textContent = `$${totalMoneyHole}`;
-
-    // Render IR Audios in Grid
-    const irGrid = document.getElementById('ir-grid');
-    irGrid.innerHTML = '';
-    auctionData.forEach(lot => {
-        const item = document.createElement('div');
-        item.className = 'ir-audio-item box-border';
-        item.innerHTML = `
-            <span class="ir-badge">${lot.baseImg}</span>
-            <span class="ir-title-sm">${lot.title}</span>
-            <button id="ir-btn-${lot.baseImg}" class="ir-btn-play" onclick="toggleStatsAudio('${lot.baseImg}')">
-                <i data-lucide="play"></i> Reproducir
-            </button>
+        tr.innerHTML = `
+            <td><span class="table-badge">${lot.baseImg}</span></td>
+            <td><span class="table-title">${lot.title}</span></td>
+            <td class="text-right"><strong class="success-text text-lg">$${lot.currentBid}</strong></td>
+            <td class="text-center"><span class="table-count text-muted">${lot.bidEvents}</span></td>
+            <td class="text-center">
+                <div class="audio-btn-group sm-group" id="audio-group-${lot.baseImg.toLowerCase()}">
+                    <button class="audio-ctrl btn-play ir-btn" id="ir-btn-${lot.baseImg}" onclick="toggleStatsAudio('${lot.baseImg}')" title="Reproducir/Pausar IR">
+                        <i data-lucide="play"></i>
+                    </button>
+                    <button class="audio-ctrl btn-restart ir-btn" onclick="stopStatsAudio()" title="Detener">
+                        <i data-lucide="square"></i>
+                    </button>
+                </div>
+            </td>
         `;
-        irGrid.appendChild(item);
+        tbody.appendChild(tr);
     });
+    
     lucide.createIcons();
 }
 
